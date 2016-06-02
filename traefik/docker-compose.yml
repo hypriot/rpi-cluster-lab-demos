@@ -1,16 +1,10 @@
 version: "2"
 
-networks:
-  apps:
-    driver: overlay
-
 services:
   traefik:
     image: hypriot/rpi-traefik
     environment:
       - constraint:hypriot.hierarchy==leader
-    networks:
-      - apps
     ports:
       - "80:80"
       - "8080:8080"
@@ -24,10 +18,8 @@ services:
         - traefik
     environment:
       - constraint:hypriot.hierarchy!=leader
-      - PORT=80
-    networks:
-      - apps
+      - PORT=8000
     labels:
       - "traefik.backend=whoami"
-      - "traefik.port=80"
       - "traefik.frontend.rule=Host:whoami.docker.localhost"
+      - "traefik.port=8000"
